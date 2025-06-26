@@ -1,0 +1,56 @@
+[architectures]
+# Default supported architectures
+arches = ["amd64", "arm64", "riscv64"]
+
+# User can add custom architectures here for mutmerge.core.py
+# custom_arches = ["ppc64", "sparc", "mips", "s390x"]
+
+[mount]
+# Host architecture mounting behavior
+# If true, host arch gets special treatment
+host_arch_equal = true
+
+# Custom base output directory (optional)
+# base_output_dir = "./gentoo-binpkgs"
+
+[docker]
+# Docker-specific settings
+enabled = true
+
+# Mount current working directory base
+mount_base = true
+
+# Docker image template (optional)
+# image_template = "gentoo/stage3:{arch}"
+
+[mutmerge]
+# Settings for mutmerge.core.py integration
+enabled = true
+
+# Python module path for mutmerge core
+core_module = "mutmerge.core"
+
+# Additional arguments for mutmerge.core.py
+# extra_args = ["--verbose", "--parallel"]
+
+[paths]
+# Directory structure configuration
+# Output: ./gentoo-binpkgs/$ARCH/
+
+# Host architecture mount behavior:
+# - If host_arch_equal = true: Direct mount to output directory
+# - If host_arch_equal = false: Use docker mount like other arches
+
+# Docker mount behavior:
+# - Mount $CWD/./gentoo-binpkgs/$ARCH to container
+# - Container path: /var/cache/binpkgs/$ARCH (configurable)
+
+[build]
+# Build-specific settings
+parallel_builds = true
+max_jobs = 4
+
+# Package-specific overrides
+[build.packages]
+# Example: override settings for specific packages
+# "sys-kernel/gentoo-sources" = { jobs = 1, timeout = 3600 }

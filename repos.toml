@@ -1,0 +1,307 @@
+# repos.toml - Repository Configuration for MutMerge
+# Defines additional repositories to enable for testing package variants
+# Use with: eselect repository enable <repo-name>
+
+[repositories.guru]
+name = "guru"
+description = "GURU - Gentoo User Repository (Unofficial)"
+url = "https://github.com/gentoo/guru.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+# Contains many experimental packages and variants
+packages_of_interest = [
+    "media-video/obs-studio",
+    "app-editors/vscodium", 
+    "games-emulation/retroarch",
+    "media-gfx/krita",
+    "net-im/discord-bin"
+]
+
+[repositories.gentoo-zh]
+name = "gentoo-zh"
+description = "Gentoo China Overlay"
+url = "https://github.com/microcai/gentoo-zh.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "net-im/wechat-uos",
+    "media-fonts/noto-cjk",
+    "app-i18n/fcitx5"
+]
+
+[repositories.steam-overlay]
+name = "steam-overlay"
+description = "Steam Overlay for Gentoo"
+url = "https://github.com/anyc/steam-overlay.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "games-util/steam-launcher",
+    "games-util/lutris",
+    "games-util/steam-client-meta"
+]
+
+[repositories.audio-overlay]
+name = "audio-overlay"
+description = "Pro Audio Overlay"
+url = "https://github.com/gentoo-audio/audio-overlay.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "media-sound/jack2",
+    "media-sound/pipewire",
+    "media-sound/ardour",
+    "media-plugins/lv2",
+    "media-sound/carla"
+]
+
+[repositories.science]
+name = "science"
+description = "Gentoo Science Overlay"
+url = "https://github.com/gentoo/sci.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "sci-libs/tensorflow",
+    "sci-libs/pytorch",
+    "sci-mathematics/octave",
+    "sci-visualization/paraview"
+]
+
+[repositories.kde]
+name = "kde"
+description = "KDE Overlay"
+url = "https://github.com/gentoo/kde.git"
+sync_type = "git"
+priority = 50
+auto_sync = false  # KDE moves fast, manual sync preferred
+packages_of_interest = [
+    "kde-plasma/plasma-meta",
+    "kde-apps/kdecore-meta",
+    "kde-frameworks/kf-env"
+]
+
+[repositories.gnome]
+name = "gnome"
+description = "GNOME Overlay"
+url = "https://github.com/gentoo/gnome.git"
+sync_type = "git"
+priority = 50
+auto_sync = false
+packages_of_interest = [
+    "gnome-base/gnome",
+    "gnome-extra/gnome-shell-extensions"
+]
+
+[repositories.multimedia]
+name = "multimedia"
+description = "Multimedia Overlay"
+url = "https://github.com/gentoo/multimedia.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "media-video/ffmpeg",
+    "media-libs/x264",
+    "media-libs/x265",
+    "media-video/mpv"
+]
+
+[repositories.wayland-desktop]
+name = "wayland-desktop"
+description = "Wayland Desktop Overlay"
+url = "https://github.com/gentoo/wayland-desktop.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "gui-wm/sway",
+    "gui-wm/wayfire",
+    "gui-wm/hyprland",
+    "gui-apps/waybar"
+]
+
+[repositories.libreoffice]
+name = "libreoffice"
+description = "LibreOffice Overlay"
+url = "https://github.com/gentoo/libreoffice.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "app-office/libreoffice",
+    "app-office/libreoffice-bin"
+]
+
+[repositories.dlang]
+name = "dlang"
+description = "D Language Overlay"
+url = "https://github.com/gentoo/dlang.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "dev-lang/dmd",
+    "dev-lang/ldc2",
+    "dev-lang/gdc"
+]
+
+[repositories.haskell]
+name = "haskell"
+description = "Haskell Overlay"
+url = "https://github.com/gentoo-haskell/gentoo-haskell.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "dev-lang/ghc",
+    "dev-haskell/cabal-install"
+]
+
+[repositories.rust]
+name = "rust"
+description = "Rust Overlay"
+url = "https://github.com/gentoo/rust-overlay.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "dev-lang/rust-bin",
+    "virtual/rust"
+]
+[repositories.pentoo]
+name = "pentoo"
+description = "Pentoo"
+url = "https://github.com/pentoo/pentoo-overlay.git"
+sync_type = "git"
+priority = 50
+auto_sync = true
+packages_of_interest = [
+    "*/*"]
+	
+# Custom/Local repositories
+[repositories.local-testing]
+name = "local-testing"
+description = "Local testing repository"
+location = "/var/db/repos/local-testing"
+sync_type = "local"
+priority = 100
+auto_sync = false
+create_if_missing = true
+
+# Repository groups for batch operations
+[repository_groups]
+desktop = ["guru", "kde", "gnome", "wayland-desktop"]
+multimedia = ["multimedia", "audio-overlay", "steam-overlay"]
+development = ["science", "dlang", "haskell", "rust"]
+international = ["gentoo-zh"]
+all_overlays = ["pentoo","guru", "gentoo-zh", "steam-overlay", "audio-overlay", "science", "kde", "gnome", "multimedia", "wayland-desktop", "libreoffice", "dlang", "haskell", "rust"]
+
+# Global repository settings
+[settings]
+default_sync_type = "git"
+default_priority = 50
+auto_sync_interval = "daily"
+max_concurrent_syncs = 3
+
+# Sync scheduling
+[sync_schedule]
+# Repositories to sync at different intervals
+hourly = []
+daily = ["guru", "multimedia", "audio-overlay", "wayland-desktop"]
+weekly = ["science", "gentoo-zh", "steam-overlay", "dlang", "haskell", "rust"]
+manual = ["kde", "gnome", "libreoffice"]
+
+# Repository-specific USE flags for testing
+[repository_use_flags]
+# USE flags commonly needed for overlay packages
+guru = ["git", "python", "go"]
+steam-overlay = ["steamruntime", "nvidia", "amd64"]
+audio-overlay = ["jack", "pipewire", "realtime"]
+science = ["mpi", "openmp", "cuda", "opencl"]
+multimedia = ["ffmpeg", "x264", "x265", "vpx", "av1"]
+
+# Masking and keywords
+[repository_keywords]
+# Accept unstable keywords for testing
+accept_unstable = ["guru", "steam-overlay", "audio-overlay"]
+live_packages = ["kde", "gnome"]
+
+# Repository health checks
+[health_checks]
+# Check these repositories for common issues
+check_metadata = true
+check_manifests = true
+check_dependencies = true
+warn_missing_keywords = true
+
+# Integration with mutmerge
+[mutmerge_integration]
+# Automatically test packages from these repositories
+auto_test_new_packages = ["guru", "multimedia"]
+test_overlay_variants = true
+prefer_overlay_versions = false
+
+# Repository maintenance
+[maintenance]
+# Cleanup old repository data
+cleanup_old_distfiles = true
+cleanup_interval = "weekly"
+keep_distfiles_days = 30
+
+# Backup important repositories
+backup_repositories = ["local-testing"]
+backup_location = "/var/backups/repos"
+
+# Notification settings
+[notifications]
+notify_sync_failures = true
+notify_new_packages = false
+notification_method = "email"  # email, syslog, or webhook
+email_recipients = ["admin@example.com"]
+
+# Security settings
+[security]
+# Verify repository signatures
+verify_signatures = true
+trusted_keys = [
+    # Gentoo official key
+    "0xDB6B8C1F96D8BF6D",
+    # Add other trusted keys here
+]
+
+# Network settings
+[network]
+# Git clone/sync settings
+git_clone_depth = 1
+use_git_partial_clone = true
+parallel_jobs = 4
+timeout_seconds = 300
+
+# Proxy settings (uncomment if needed)
+# http_proxy = "http://proxy.example.com:8080"
+# https_proxy = "https://proxy.example.com:8080"
+# no_proxy = "localhost,127.0.0.1,::1"
+
+# Advanced repository configuration
+[advanced]
+# Custom repository locations
+custom_repo_base = "/var/db/repos"
+
+# Overlay priority calculation
+priority_calculation = "manual"  # manual, auto, or weighted
+
+# Repository dependency resolution
+resolve_dependencies = true
+dependency_resolver = "portage"  # portage or paludis
+
+# Custom sync commands
+[custom_sync_commands]
+# Define custom sync commands for special repositories
+# Example for a repository that needs special handling
+# special-repo = "cd /var/db/repos/special-repo && git pull --rebase"

@@ -1,0 +1,192 @@
+# packages.toml - MutMerge Configuration
+# Defines packages and their USE flag variants for systematic testing
+
+[packages.xfce4-panel]
+# Base package configuration
+description = "XFCE4 panel with various plugin combinations"
+category = "xfce-base"
+
+# USE flag variants to test
+USE1 = "gtk3 introspection"
+USE2 = "-gtk3 gtk2"
+USE3 = "vala wnck"
+USE4 = "-vala -wnck"
+USE5 = "startup-notification dbusmenu"
+
+[packages.firefox]
+description = "Firefox browser with multimedia variants"
+category = "www-client"
+
+USE1 = "pulseaudio alsa"
+USE2 = "pulseaudio -alsa"
+USE3 = "-pulseaudio alsa"
+USE4 = "hwaccel vaapi"
+USE5 = "hwaccel vdpau"
+USE6 = "-hwaccel"
+USE7 = "system-av1 system-harfbuzz system-icu system-jpeg system-libevent system-libvpx system-webp"
+USE8 = "-system-av1 -system-harfbuzz -system-icu -system-jpeg -system-libevent -system-libvpx -system-webp"
+
+[packages.libpng]
+description = "PNG library with APNG support variants"
+category = "media-libs"
+
+USE1 = "apng static-libs"
+USE2 = "apng -static-libs"
+USE3 = "-apng static-libs"
+USE4 = "-apng -static-libs"
+
+[packages.libwebm]
+description = "WebM library variants"
+category = "media-libs"
+
+USE1 = "static-libs"
+USE2 = "-static-libs"
+
+[packages.vlc]
+description = "VLC media player with codec variants"
+category = "media-video"
+
+USE1 = "ffmpeg x264 x265 vpx"
+USE2 = "ffmpeg x264 -x265 vpx"
+USE3 = "ffmpeg -x264 x265 vpx"
+USE4 = "-ffmpeg x264 x265 vpx"
+USE5 = "pulseaudio alsa jack"
+USE6 = "pulseaudio -alsa -jack"
+USE7 = "-pulseaudio alsa jack"
+USE8 = "qt5 -qt6"
+USE9 = "-qt5 qt6"
+USE10 = "vaapi vdpau"
+USE11 = "vaapi -vdpau"
+USE12 = "-vaapi vdpau"
+
+[packages.imagemagick]
+description = "ImageMagick with various format support"
+category = "media-gfx"
+
+USE1 = "jpeg png gif tiff webp"
+USE2 = "jpeg png -gif tiff webp"
+USE3 = "jpeg png gif -tiff webp"
+USE4 = "jpeg png gif tiff -webp"
+USE5 = "svg xml fontconfig"
+USE6 = "svg xml -fontconfig"
+USE7 = "-svg xml fontconfig"
+USE8 = "openmp -openmp"
+USE9 = "hdri -hdri"
+USE10 = "cxx -cxx"
+
+[packages.mesa]
+description = "Mesa 3D graphics library variants"
+category = "media-libs"
+
+USE1 = "gallium classic"
+USE2 = "gallium -classic"  
+USE3 = "-gallium classic"
+USE4 = "vulkan -vulkan"
+USE5 = "vaapi vdpau"
+USE6 = "vaapi -vdpau"
+USE7 = "-vaapi vdpau"
+USE8 = "opencl -opencl"
+USE9 = "gles1 gles2"
+USE10 = "-gles1 gles2"
+USE11 = "gles1 -gles2"
+
+[packages.gstreamer]
+description = "GStreamer multimedia framework"
+category = "media-libs"
+
+USE1 = "orc introspection"
+USE2 = "orc -introspection"
+USE3 = "-orc introspection"
+USE4 = "-orc -introspection"
+
+[packages.gst-plugins-base]
+description = "GStreamer base plugins"
+category = "media-libs"
+
+USE1 = "alsa pulseaudio"
+USE2 = "alsa -pulseaudio"
+USE3 = "-alsa pulseaudio"
+USE4 = "ogg vorbis theora"
+USE5 = "ogg vorbis -theora"
+USE6 = "ogg -vorbis theora"
+USE7 = "-ogg vorbis theora"
+USE8 = "X opengl"
+USE9 = "X -opengl"
+USE10 = "-X opengl"
+
+[packages.gst-plugins-good]
+description = "GStreamer good plugins"
+category = "media-plugins"
+
+USE1 = "gtk jpeg png"
+USE2 = "gtk jpeg -png"
+USE3 = "gtk -jpeg png"
+USE4 = "-gtk jpeg png"
+USE5 = "pulseaudio v4l"
+USE6 = "pulseaudio -v4l"
+USE7 = "-pulseaudio v4l"
+
+[packages.chromium]
+description = "Chromium browser variants"
+category = "www-client"
+
+USE1 = "proprietary-codecs"
+USE2 = "-proprietary-codecs"
+USE3 = "system-ffmpeg system-harfbuzz system-icu"
+USE4 = "-system-ffmpeg -system-harfbuzz -system-icu"
+USE5 = "vaapi -vaapi"
+USE6 = "pulseaudio -pulseaudio"
+USE7 = "gtk4 -gtk4"
+
+# Global settings
+[settings]
+# Maximum number of variants to test per package
+max_variants_per_package = 25
+
+# Build timeout in seconds
+build_timeout = 3600
+
+# Parallel builds
+parallel_builds = false
+
+# Skip known problematic combinations
+auto_skip_conflicts = true
+
+# Chroot/Docker settings
+[environment]
+# Optional chroot path
+# chroot_path = "/var/lib/mutmerge/chroot"
+
+# Optional Docker image
+# docker_image = "gentoo/portage:latest"
+
+# Additional environment variables
+FEATURES = "binpkg-multi-instance parallel-fetch"
+MAKEOPTS = "-j4"
+PORTAGE_TMPDIR = "/var/tmp/mutmerge"
+
+# Package-specific overrides
+[overrides]
+# Skip certain packages entirely
+skip_packages = []
+
+# Force specific USE flags for all builds
+global_use_flags = ["unicode", "nls"]
+
+# Packages that require special handling
+[special_handling]
+# Packages that need rebuilds when USE flags change
+requires_rebuild = ["mesa", "xorg-server", "gtk+"]
+
+# Packages with known problematic combinations
+[problematic_combinations]
+# Format: package = ["use_flags_combination", "reason"]
+firefox = [
+    ["-system-libvpx system-av1", "AV1 requires libvpx"],
+    ["gtk2 gtk3", "Cannot have both GTK versions"],
+]
+
+vlc = [
+    ["-ffmpeg x264", "x264 requires ffmpeg"],
+    ["-qt5 -qt6", "Requires at least one GUI toolkit"],
+]
