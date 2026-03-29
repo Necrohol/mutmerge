@@ -1,39 +1,38 @@
-#!/usr/bin/env python3
-"""
-Database management module for MutMerge
-Handles SQLite operations for tracking build results
-"""
-
 import sqlite3
-import time
-from typing import Dict, Optional
-
 
 class MutMergeDB:
-    """SQLite database manager for tracking build results"""
-    
-    def __init__(self, db_path: str = "mutmerge.db"):
-        self.db_path = db_path
-        self.init_database()
-    
-    def init_database(self):
-        """Initialize the SQLite database with necessary tables"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        # Create builds table
-        cursor.execute("""
+    def __init__(self, db_path):
+        self.conn = sqlite3.connect(db_path)
+        self._create_tables()
+
+    def _create_tables(self):
+        self.conn.execute("""
             CREATE TABLE IF NOT EXISTS builds (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                package TEXT NOT NULL,
-                use_flags TEXT NOT NULL,
-                status TEXT NOT NULL,
-                timestamp INTEGER NOT NULL,
-                build_time REAL,
-                error_log TEXT,
-                binary_path TEXT,
-                chroot_env TEXT
+                id INTEGER PRIMARY KEY,
+                package TEXT,
+                arch TEXT,
+                status TEXT,
+                duration INTEGER,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
             )
+        """)
+        self.conn.commit()
+
+    def get_package_weight(self, package, arch):
+        """Returns average build time. Lower = Faster = Higher Priority."""
+        cursor = self.conn.execute(
+            "SELECT AVG(duration) FROM builds WHERE package=? AND arch=? AND status='SUCCESS'",
+            (package, arch)
+        )
+        row = cursor.fetchone()
+        return row[0] if row[0] is not None else 0
+
+    def record_build(self, package, arch, status, duration):
+        self.conn.execute(
+            "INSERT INTO builds (package, arch, status, duration) VALUES (?, ?, ?, ?)",
+            (package, arch, status, duration)
+        )
+        self.conn.commit()
         """)
         
         # Create skip_combinations table for known bad combos
